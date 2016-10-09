@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION  2.8)
+project(hollowcube)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	set(LINUX TRUE)
+	add_definitions(-DLINUX)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set(DARWIN TRUE)
+	add_definitions(-DDARWIN)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+	set(FREEBSD TRUE)
+	add_definitions(-DFREEBSD)
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+	set(WINDOWS TRUE)
+	add_definitions(-DWINDOWS)
+endif()
+
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_C_FLAGS "-g -fPIC")
+set(CMAKE_CXX_FLAGS "-g -fPIC -ObjC++ -std=c++11")
+set(CMAKE_C_LINK_FLAGS "-g -ldl -lpthread  -lobjc")										
+set(CMAKE_CXX_LINK_FLAGS "-g -ldl -lpthread  -lobjc")
+set(root_src_dir ${hllowcube_SOURCE_DIR})
+
+include_directories(${root_src_dir}include ${root_src_dir}UnitTest)
+
+add_subdirectory(test)
+add_subdirectory(mklib)
