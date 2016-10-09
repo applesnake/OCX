@@ -2,17 +2,17 @@
 #import <objc/NSObject.h>
 #include <stdio.h>
 #import "OCstring.hh"
-
-#include <string>
+#import "OCcache.hh"
 using namespace std;
 
-@class OCcache
+@class OCcache;
 
 @interface OCfile : NSObject
 {
 	FILE*		f;
 	string	fname;
 }
+@property (readonly, nonatomic) FILE* f;
 -(id) init;
 -(void) dealloc;
 -(id) initWithFile:(FILE*)f;
@@ -33,7 +33,6 @@ using namespace std;
 -(size_t) currentPos;
 -(void) seekSet;
 -(void) seekEnd;
--(void) truncate:(size_t)off;
 -(void) seekAt:(size_t)offset;
 -(long) readBytes:(size_t)n
 			 withBuffer:(void*)buf;
@@ -45,13 +44,13 @@ using namespace std;
 -(OCcache*) readAll;
 -(long) writeOCcache:(OCcache*)occ;
 
-+(int) writeFileWithCname:(const char*) fname
-							 withProvider:(id)p;
+// +(int) writeFileWithCname:(const char*) fname
+// 							 withProvider:(id)p;
 
-+(int) writeFileWithOCname:(OCstring*) fname
-								withProvider:(id)p;
+// +(int) writeFileWithOCname:(OCstring*) fname
+// 								withProvider:(id)p;
 
-+(int) writeFileWithFile:(FILE*)f
-							withProvider:(id)p;
+// +(int) writeFileWithFile:(FILE*)f
+// 							withProvider:(id)p;
 
 @end

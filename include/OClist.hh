@@ -7,6 +7,7 @@
 {
 	std::list<id>* p;
 }
+@property (readonly, nonatomic) std::list<id>* p;
 -(id) init;
 -(void) dealloc;
 -(id) initWithObjects:(id)o, ...;
@@ -28,7 +29,7 @@
 +(id) listWithOCarrayNoCopy:(OCarray*)oca;
 +(id) listWithStdListNoCopy:(const std::list<id>*)l;
 
--(int) length;
+-(size_t) length;
 -(id) headObject;
 -(id) tailObject;
 -(id) popHead;
@@ -36,22 +37,22 @@
 -(id) pushHead:(id)o,...;
 -(id) pushBack:(id)o,...;
 -(id) insertObject:(id)o
-				afterIndex:(int)idx;
+				afterIndex:(size_t)idx;
 -(id) insertObject:(id)o
-			 beforeIndex:(int)idx;
+			 beforeIndex:(size_t)idx;
 
--(id)		removeObjectAtIndex:(int)idx;
--(int)	removeObjectFromIndex:(int)b
-										withRange:(int)r;
--(int) removeObjectBeforeIndex:(int)b
-										afterIndex:(int)e;
--(id) trimBeforeIndex:(int)i;
--(id) trimAfterIndex:(int)i;
+-(id)		removeObjectAtIndex:(size_t)idx;
+-(int)	removeObjectFromIndex:(size_t)b
+										withRange:(size_t)r;
+-(int) removeObjectBeforeIndex:(size_t)b
+										afterIndex:(size_t)e;
+-(id) trimBeforeIndex:(size_t)i;
+-(id) trimAfterIndex:(size_t)i;
 
 -(int)	indexOfObject:(id)o;
--(id)		objectAtIndex:(int)idx;
+-(id)		objectAtIndex:(size_t)idx;
 -(id) setObject:(id)o
-				atIndex:(int)idx;
+				atIndex:(size_t)idx;
 -(id) removeAllObjects;
 @end
 

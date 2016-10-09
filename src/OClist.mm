@@ -1,9 +1,11 @@
 #import "OClist.hh"
+#import "OCarray.hh"
 #include <stdarg.h>
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-method-access"
 
 @implementation OClist
+@synthesize p;
 -(id) init
 {
 	[super init];
@@ -36,18 +38,17 @@
 };
 
 +(id) listWithOClist:(OClist*)ocl{
-	OClist* l = [[OClist alloc] init];
-	[l autorelease];
+	OClist* l = [[OClist alloc] initWithOClist:ocl];
 	return l;
 };
 +(id) listWithOCarray:(OCarray*)oca{
-	OClist* l = [[OClist alloc] init];
-	[l autorelease];
+	OClist* l = [[OClist alloc] initWithOCarray:oca];
 	return l;
 };
 +(id) listWithStdList:(const std::list<id>*) l{
-	OClist* nl = [[OClist alloc] init];
+	OClist* nl = [[OClist alloc] initWithStdList:l];
 	[nl autorelease];
+	[nl retain];
 	return nl;
 };
 
@@ -66,66 +67,109 @@
 	return ocl; 
 };
 +(id) listWithOClistNoCopy:(OClist*)ocl{
-	OClist* l = [[OClist alloc] init];
-	[l autorelease];
+	OClist* l = [[OClist alloc] initWithOClistNoCopy:ocl];
 	return l;
 };
 +(id) listWithOCarrayNoCopy:(OCarray*)oca{
-	OClist* l = [[OClist alloc] init];
+	OClist* l = [[OClist alloc] initWithOCarrayNoCopy:oca];
 	return l;
 };
 +(id) listWithStdListNoCopy:(const std::list<id>*) l{
-	OClist* nl = [[OClist alloc] init];
-	[nl autorelease];
+	OClist* nl = [[OClist alloc] initWithStdList:l];
 	return nl;
 };
 
 -(id) initWithObjects:(id)o, ...{
 	va_list va;
 	va_start(va, o);
+	p = new std::list<id>;
 	p->push_back([o retain]);
 	id t = va_arg(va, id);
 	while(t != nil) {
 		p->push_back([[t clone] retain]);
+		t = va_arg(va, id);
 	}
 	va_end(va);
+	[self autorelease];
+	[self retain];
 	return self; 
 };
 
 -(id) initWithOClist:(OClist*)ocl{
+	p = new std::list<id>;
+	for(id o : *(ocl.p)) {
+		p->push_back([o clone]);
+	}
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(id) initWithOCarray:(OCarray*)oca{
+	p = new std::list<id>;
+	for(id o : *(oca.p)) {
+		p->push_back([o clone]);
+	}
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(id) initWithStdList:(const std::list<id>*) l{
+	p = new std::list<id>;
+	for(id o : *l) {
+		p->push_back([o clone]);
+	}
+	[self autorelease];
+	[self retain];
 	return self;
 };
 
 -(id) initWithObjectsNoCopy:(id)o, ...{
 	va_list va;
 	va_start(va, o);
+	p = new std::list<id>;
 	p->push_back([o retain]);
 	id t = va_arg(va, id);
 	while(t != nil) {
 		p->push_back([t retain]);
+		t = va_arg(va, id);
 	}
 	va_end(va);
+	[self autorelease];
+	[self retain];
 	return self; 
 };
 
 -(id) initWithOClistNoCopy:(OClist*)ocl{
+	p = new std::list<id>;
+	for(id o : *(ocl.p)) {
+		p->push_back([o retain]);
+	}
+	[self autorelease];
+	[self retain];
+	return self;
 	return self;
 };
 -(id) initWithOCarrayNoCopy:(OCarray*)oca{
+	p = new std::list<id>;
+	for(id o : *(oca.p)) {
+		p->push_back([o retain]);
+	}
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(id) initWithStdListNoCopy:(const std::list<id>*) l{
+	p = new std::list<id>;
+	for(id o : *l) {
+		p->push_back([o retain]);
+	}
+	[self autorelease];
+	[self retain];
 	return self;
 };
 
--(int) length{
-	return (int)(p->size());
+-(size_t) length{
+	return (size_t)(p->size());
 };
 -(id) popHead{
 	if(p->begin() != p->end()) {
@@ -164,15 +208,14 @@
 	va_start(va, o);
 	id t = nil;
 	while((t = va_arg(va, id)) != nil) {
-		p->push_front([t retain]);
+		p->push_back([t retain]);
 	}
 	va_end(va);
 	return self;
 };
 -(id) insertObject:(id)o
-				afterIndex:(int)idx
+				afterIndex:(size_t)idx
 {
-	if(idx < 0) return self;
 	int len = [self length];
 	if(len == 0) {
 		for(int i = 0;i < idx - 1; ++i) {
@@ -198,9 +241,8 @@
 	return self;
 };
 -(id) insertObject:(id)o
-			 beforeIndex:(int)idx
+			 beforeIndex:(size_t)idx
 {
-	if(idx < 0) return self;
 	int len = [self length];
 	if(len == 0) {
 		for(int i = 0;i < idx - 1; ++i) {
@@ -224,22 +266,17 @@
 	}
 	return self;
 };
--(id) objectAtIndex:(int)idx{
+-(id) objectAtIndex:(size_t)idx{
 	int len = [self length];
 	if(idx > len) return nil;
-	if(idx < 0 &&
-		 (len + idx) > 0) {
-		auto itr = p->begin();
-		for(int i = 0;i < (len + idx); ++i) {
-			++itr;
-		};
-		return (*itr);
-	}
-	else 
-		return nil;
+	auto itr = p->begin();
+	for(int i = 0;i < idx; ++i) {
+		++itr;
+	};
+	return (*itr);
 };
 
--(int) indexOfObject:(id)o
+-(size_t) indexOfObject:(id)o
 {
 	[o retain];
 	if(not [o respondsToSelector:@selector(equalTo:)]) {
@@ -258,13 +295,10 @@
 	return -1;
 };
 
--(id) removeObjectAtIndex:(int)idx
+-(id) removeObjectAtIndex:(size_t)idx
 {
 	int len = [self length];
-	if(idx < 0 && (idx + len - 1) < 0) {
-		return self;
-	}
-	int offset  = idx < 0 ? (idx + len - 1): idx;
+	int offset  = idx;
 	if((len - offset)  > offset) {
 		auto itr = p->begin();
 		for(int i = 0;i < offset; ++i) {
@@ -276,18 +310,17 @@
 	}
 	else {
 		auto itr = --(p->end());
-		for(int i = len - 1;i > offset; ++i ) {
-			--itr;
-		}
+		for(int i = len - 1;i > offset; --i,--itr ){
+		};
 		id t = *itr;
 		if(t) [t release];
 		p->erase(itr);
 	}
 	return self;
 };
--(int) removeObjectFromIndex:(int)b
-									withRange:(int)r{
-	if(b < 0 || r <= 0) return 0;
+-(size_t) removeObjectFromIndex:(size_t)b
+											withRange:(size_t)r{
+	if(r <= 0) return 0;
 	int len = p->size();
 	if(b > len) return 0;
 	r = ((b + r + 1) > len) ? (len - b) : r;
@@ -304,9 +337,9 @@
 	}
 	return r;
 };
--(int) removeObjectBeforeIndex:(int)b
-									 afterIndex:(int)e{
-	if(b < 0 || e < 0 || e < b) return 0;
+-(size_t) removeObjectBeforeIndex:(size_t)b
+									 afterIndex:(size_t)e{
+	if(e < b) return 0;
 	int len = p->size();
 	e = (e > (len - 1)) ? (len - 1) : e;
 	auto itr = p->begin();
@@ -334,13 +367,10 @@
 };
 
 -(id) setObject:(id)o
-				atIndex:(int)idx{
+				atIndex:(size_t)idx{
 	int len = [self length];
-	if(idx < 0 && len <= 0) {
+	if(len <= 0) {
 		return self;
-	}
-	if(idx < 0 && (len + idx) > 0) {
-		idx = len + idx;
 	}
 	auto itr = p->begin();
 	for(int i = 0;i < idx; ++i) {
@@ -359,10 +389,9 @@
 	return self;
 };
 
--(id) trimBeforeIndex:(int)idx {
+-(id) trimBeforeIndex:(size_t)idx {
 	int len = [self length];
-	if(idx < 0 && len <= 0) return self;
-	if(idx < 0 && (idx + len - 1) > 0) idx = len + idx - 1;
+	if(len <= 0) return self;
 	if(idx > (len-1) )  {
 		[self removeAllObjects];
 	}else {
@@ -373,10 +402,9 @@
 	}
 	return self;
 };
--(id) trimAfterIndex:(int)idx {
+-(id) trimAfterIndex:(size_t)idx {
 	int len = [self length];
-	if(idx < 0 && len <= 0) return self;
-	if(idx < 0 && (idx + len - 1) > 0) idx = (len + idx - 1);
+	if(len <= 0) return self;
 	if(idx > (len - 1)) {
 		return self;
 	}else {

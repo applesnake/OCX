@@ -4,6 +4,7 @@ set(ocx_core_src
 	../src/OCcachePrivate.mm
 	../src/OCdictionary.mm
 	../src/OClist.mm
+	../src/OCfile.mm
 	../src/OCmetaToolOSX.mm
 	../src/OCstring.mm
 	../src/OCarray.mm
@@ -24,13 +25,13 @@ add_library(ocxsu ${ocx_str_util_src})
 
 target_link_libraries(ocxsu)
 
-set(ocs_printer_src
+set(ocx_printer_src
 	../src/OCstring+Printer.mm
 	../src/OCarray+Printer.mm
 	../src/OClist+Printer.mm
 	../src/OCdictionary+Printer.mm
 	)
-add_library(ocxpr ${ocs_printer_src})
+add_library(ocxpr ${ocx_printer_src})
 
 target_link_libraries(ocxpr)
 

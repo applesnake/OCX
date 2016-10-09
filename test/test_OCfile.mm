@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
 	[to showProgress];
 	[to start];
 	[to teardown];
+	system("rm ./1");
 	if([to fail] > 0) {
 		return -1;
 	}

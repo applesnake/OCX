@@ -7,7 +7,7 @@
 {
 	std::vector<id>* p;
 }
-@property (readonly, atomic) std::vector<id>* p;
+@property (readonly, nonatomic) std::vector<id>* p;
 -(id) init;
 -(void) dealloc;
 -(id) initWithObjects:(id)o, ...;
@@ -20,9 +20,9 @@
 +(id) arrayWithObjects:(id)o, ...;
 +(id) arrayWithOCarray:(OCarray*)oca;
 +(id) arrayWithStdVector:(const std::vector<id>*)v;
-// +(id) arrayWithObjectsNoCopy:(id)o, ...;
-// +(id) arrayWithOCarrayNoCopy:(OCarray*)oca;
-// +(id) arrayWithStdVectorNoCopy:(const std::vector<id>*)v;
++(id) arrayWithObjectsNoCopy:(id)o, ...;
++(id) arrayWithOCarrayNoCopy:(OCarray*)oca;
++(id) arrayWithStdVectorNoCopy:(const std::vector<id>*)v;
 
 -(size_t) length;
 -(id) pop; // Tail ONLY

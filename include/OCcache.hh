@@ -36,15 +36,15 @@
 -(id)		initWithUIntValue:(unsigned int) v
 										count:(size_t)n;
 -(id)		initWithCharValue:(char) v
-									 count:(size_t)n;
+										count:(size_t)n;
 -(id)		initWithUCharValue:(unsigned char) v
 										 count:(size_t)n;
 -(id)		initWithShortValue:(short)v
 										 count:(size_t)n;
 -(id)		initWithUShortValue:(unsigned short)v
-										 count:(size_t)n;
+											count:(size_t)n;
 -(id)		initWithLongValue:(long)v
-										 count:(size_t)n;
+										count:(size_t)n;
 -(id)		initWithULongValue:(unsigned long)v
 										 count:(size_t)n;
 

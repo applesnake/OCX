@@ -126,6 +126,15 @@
 	[oca retain];
 	return oca;
 };
++(id) arrayWithOCarrayNoCopy:(OCarray*)oca{
+	OCarray* oca2 = [[OCarray alloc] initWithOCarray:oca];
+	return oca2;
+};
++(id) arrayWithStdVectorNoCopy:(const std::vector<id>*)v{
+	OCarray* oca2 = [[OCarray alloc] initWithStdVector:v];
+	return oca2;
+};
+
 -(size_t) length{
 	return p->size();
 };
