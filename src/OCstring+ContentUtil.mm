@@ -1,4 +1,5 @@
 #import "OCstring+ContentUtil.hh"
+#include <stdlib.h>
 #include <string>
 #include <regex>
 using namespace std;
