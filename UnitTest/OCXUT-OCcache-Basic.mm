@@ -2,7 +2,7 @@
 #include <string.h>
 
 @implementation OCXUT_OCcache_Basic
--(BOOL)		UCXUT_initWithOCcache:(OCcache*)occ
+-(BOOL)		OCXUT_initWithOCcache:(OCcache*)occ
 								 beginElement:(size_t)b
 												count:(size_t)c
 											 shadow:(BOOL)b{
@@ -10,9 +10,12 @@
 		char str[] = "0123456789";
 		int	 ivalues[] = {0,1,2,3,4,5,6,7,8,9};
 		OCcache* occ0 = [[OCcache alloc] initWithBytes:(void*)str
-																							size:10];
+																							size:10
+																			 elementSize:1
+										 ];
 		OCcache* occ1 = [[OCcache alloc] initWithBytes:(void*)ivalues
-																							size:(10*sizeof(int))];
+																							size:(10*sizeof(int))
+																			 elementSize:sizeof(int)];
 		OCcache* occ00 = [[OCcache alloc] initWithOCcache:occ0
 																				 beginElement:5
 																								count:5
@@ -38,7 +41,9 @@
 -(BOOL)		OCXUT_initWithOCcache:(OCcache*)occ{
 	@autoreleasepool{
 		OCcache* occ = [[OCcache alloc] initWithBytes:(void*)"0123456789"
-																						 size:10];
+																						 size:10
+																			elementSize:1
+										];
 		OCcache* occ0 = [[OCcache alloc] initWithOCcache:occ];
 		if(!memcmp(occ0.p, "0123456789", 10)) {
 			return YES;
@@ -48,10 +53,13 @@
 };
 
 -(BOOL)		OCXUT_initWithBytes:(void*) bytes
-											 size:(size_t) s{
+											 size:(size_t) s
+									elementSize:(size_t)e
+{
 	@autoreleasepool{
 		OCcache* occ = [[OCcache alloc] initWithBytes:(void*)"0123456789"
-																						 size:10];
+																						 size:10
+																			elementSize:1];
 		if(!memcmp(occ.p, "0123456789", 10)) {
 			return YES;
 		}
@@ -63,7 +71,7 @@
 												 count:(size_t)n{
 	@autoreleasepool{
 		OCcache* occ = [[OCcache alloc] initWithIntValue:1
-																							 coutn:5];
+																							 count:5];
 		int* pi = (int*)occ.p;
 		for(int i = 0;i< 5; ++i) {
 			if(pi[i] != 1) return NO;
@@ -92,7 +100,7 @@
 																								count:5];
 		char* pc = (char*)occ.p;
 		for(int i = 0;i < 5; ++i) {
-			if(pc[i] != 'c')  return NO;
+			if(pc[i] != 'a')  return NO;
 		}
 	}
 	return YES;
@@ -194,7 +202,8 @@
 +(BOOL) OCXUT_OCcacheWithOCcache:(OCcache*)occ{
 	@autoreleasepool{
 		OCcache* occ0 = [[OCcache alloc] initWithBytes:(void*)"0123456789"
-																							size:10];
+																							size:10
+																			 elementSize:1];
 		OCcache* occ1 = [OCcache OCcacheWithOCcache:occ0];
 		if(!memcmp(occ1.p, occ0, 10)) {
 			return NO;
@@ -207,7 +216,8 @@
 												 count:(size_t)r{
 	@autoreleasepool{
 		OCcache* occ0 = [[OCcache alloc] initWithBytes:(char*)"0123456789"
-																							size:10];
+																							size:10
+																			 elementSize:1];
 		OCcache* occ1 = [OCcache shadowOCcacheWithOCcache:occ0
 																				 beginElement:1
 																								count:9];

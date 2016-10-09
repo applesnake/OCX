@@ -28,7 +28,8 @@
 -(id)		initWithOCcache:(OCcache*)occ;
 
 -(id)		initWithBytes:(void*) bytes
-								 size:(size_t) s;
+								 size:(size_t) s
+					elementSize:(size_t)e;
 
 -(id)		initWithIntValue:(int) v
 									 count:(size_t)n;

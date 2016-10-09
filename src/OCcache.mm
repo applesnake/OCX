@@ -38,13 +38,15 @@
 };
 
 -(id)		initWithBytes:(void*) pb
-								 size:(size_t) sz{
+								 size:(size_t) sz
+					elementSize:(size_t) e
+{
 	[super init];
 	p = new char[sz];
 	shadow = NO;
 	bytes = sz;
 	memcpy(p,pb, sz);
-	elementByteCount = 1;
+	elementByteCount = e;
 	[self autorelease];
 	[self retain];
 	return self;

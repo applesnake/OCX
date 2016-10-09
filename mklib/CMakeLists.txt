@@ -2,8 +2,6 @@ include_directories(${root_src_dir}UnitText ${root_src_dir}include)
 set(ocx_core_src
 	../src/OCarray.mm
 	../src/OCcachePrivate.mm
-	../src/OCcache.mm
-	../src/OCcache+3DAcc.mm
 	../src/OCdictionary.mm
 	../src/OClist.mm
 	../src/OCmetaToolOSX.mm

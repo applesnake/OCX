@@ -1,192 +1,223 @@
-#import "OCcachePrivate.hh"
+#import "OCcache.hh"
+//#import "OCfile.hh"
 #include <string.h>
 
-template<typename T>
-void* new_buffer_with_value(T t, size_t n) {
-	T* pt = new T[n];
-	for(size_t i = 0; i < n; ++i) {
-		pt[i] = t;
-	}
-	return (void*)pt;
-};
-template<>
-void* new_buffer_with_value(char t, size_t n) {
-	char* pt = new char[n];
-	memset(pt, t, n);
-	return (void*)pt;
-};
-template<>
-void* new_buffer_with_value(unsigned char t, size_t n) {
-	unsigned char* pt = new unsigned char[n];
-	memset(pt, t, n);
-	return (void*)pt;
-};
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
 
-@implementation OCcache 
-@synthesize shadow, bytes, elementByteCount;
--(id) init{
+@implementation OCcache
+@synthesize p, shadow, bytes, elementByteCount;
+
+-(id)		init{
 	[super init];
 	p = nil;
-	bytes = 0;
-	elementByteCount = 1;
 	shadow = NO;
+	bytes = 0;
+	elementByteCount = 0;
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(void) dealloc{
-	if(not shadow) {
-		if(p) delete [] (char*)p;
-	}else {
-		p = nil;
-	}
-	bytes = 0;
-	elementByteCount = 1;
+	if(p) delete [] (char*)p;
 	shadow = NO;
+	bytes = 0;
+	elementByteCount = 0;
 	[super dealloc];
-
 };
--(id) initWithBytes:(void*) pv
-							 size:(size_t)n {
+
+-(id)		initWithOCcache:(OCcache*)occ{
 	[super init];
-	p = new_buffer_with_value<char>(0, n);
-	bytes = n;
-	elementByteCount = 1;
-	memcpy(p, pv, n);
+	p = new char[occ.bytes];
+	shadow = NO;
+	bytes = occ.bytes;
+	elementByteCount = occ.elementByteCount;
+	memcpy(p, occ.p, occ.bytes);
+	[self autorelease];
+	[self retain];
 	return self;
 };
+
+-(id)		initWithBytes:(void*) pb
+								 size:(size_t)sz
+					elementSize:(size_t)e
+{
+	[super init];
+	p = new char[sz];
+	shadow = NO;
+	bytes = sz;
+	memcpy(p,pb, sz);
+	elementByteCount = e;
+	[self autorelease];
+	[self retain];
+	return self;
+};
+
 -(id)		initWithIntValue:(int) v
 									 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<int>(v, n);
+	p = new int[n];
+	shadow = NO;
 	bytes = n * sizeof(int);
 	elementByteCount = sizeof(int);
+	for(int i = 0;i < n; ++i) ((int*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(id)		initWithUIntValue:(unsigned int) v
 										count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<unsigned int>(v, n);
+	p = new unsigned int[n];
+	shadow = NO;
 	bytes = n * sizeof(unsigned int);
 	elementByteCount = sizeof(unsigned int);
+	for(int i = 0;i < n; ++i) ((unsigned int*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
-
--(id)		initWithCharValue:(int) v
+-(id)		initWithCharValue:(char) v
 									 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<char>(v, n);
+	p = new char[n];
+	shadow = NO;
 	bytes = n * sizeof(char);
 	elementByteCount = sizeof(char);
+	for(int i = 0;i < n; ++i) ((char*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
 -(id)		initWithUCharValue:(unsigned char) v
 										 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<unsigned char>(v, n);
+	p = new unsigned char[n];
+	shadow = NO;
 	bytes = n * sizeof(unsigned char);
 	elementByteCount = sizeof(unsigned char);
+	for(int i = 0;i < n; ++i) ((unsigned char*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
-
--(id)		initWithShortValue:(short) v
+-(id)		initWithShortValue:(short)v
 										 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<short>(v, n);
+	p = new short[n];
+	shadow = NO;
 	bytes = n * sizeof(short);
 	elementByteCount = sizeof(short);
+	for(int i = 0;i < n; ++i) ((short*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
--(id)		initWithUShortValue:(unsigned short) v
+-(id)		initWithUShortValue:(unsigned short)v
 										 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<unsigned short>(v, n);
+	p = new unsigned short[n];
+	shadow = NO;
 	bytes = n * sizeof(unsigned short);
 	elementByteCount = sizeof(unsigned short);
+	for(int i = 0;i < n; ++i) ((unsigned short*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
--(id)		initWithLongValue:(long) v
-										count:(size_t)n{
-	[super init];
-	p = new_buffer_with_value<long>(v, n);
-	bytes = n * sizeof(long);
-	elementByteCount = sizeof(long);
-	return self;
-};
--(id)		initWithULongValue:(unsigned long) v
+-(id)		initWithLongValue:(long)v
 										 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<unsigned long>(v, n);
+	p = new long[n];
+	shadow = NO;
+	bytes = n * sizeof(long);
+	elementByteCount = sizeof(long);
+	for(int i = 0;i < n; ++i) ((long*)p)[i] = v;
+	[self autorelease];
+	[self retain];
+	return self;
+};
+-(id)		initWithULongValue:(unsigned long)v
+										 count:(size_t)n{
+	[super init];
+	p = new unsigned long[n];
+	shadow = NO;
 	bytes = n * sizeof(unsigned long);
 	elementByteCount = sizeof(unsigned long);
+	for(int i = 0;i < n; ++i) ((unsigned long*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
 
--(id)		initWithFloatValue:(float) v
-									 count:(size_t)n{
+-(id)		initWithFloatValue:(float)v
+										 count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<float>(v, n);
+	p = new float[n];
+	shadow = NO;
 	bytes = n * sizeof(float);
 	elementByteCount = sizeof(float);
+	for(int i = 0;i < n; ++i) ((float*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
--(id)		initWithDoubleValue:(double) v
+-(id)		initWithDoubleValue:(double)v
 											count:(size_t)n{
 	[super init];
-	p = new_buffer_with_value<double>(v, n);
+	p = new double[n];
+	shadow = NO;
 	bytes = n * sizeof(double);
 	elementByteCount = sizeof(double);
-	return self;
-};
--(id)		initWithOCcache:(OCcache*)occ{
-	[super init];
-	p = new char[occ->bytes];
-	memcpy(p, occ->p, occ->bytes);
-	bytes = occ->bytes;
-	elementByteCount = occ->elementByteCount;
-	shadow = NO;
+	for(int i = 0;i < n; ++i) ((double*)p)[i] = v;
+	[self autorelease];
+	[self retain];
 	return self;
 };
 
 +(id) OCcacheWithOCcache:(OCcache*)occ{
 	return [[OCcache alloc] initWithOCcache:occ];
 };
+-(id) initWithOCcache:(OCcache*)occ
+				 beginElement:(size_t)b
+								count:(size_t)c
+							 shadow:(BOOL)yn{
+	[super init];
+	if(yn) {
+		elementByteCount = occ.elementByteCount;
+		bytes = c * elementByteCount;
+		p = (char*)occ.p + b * elementByteCount;
+		shadow = YES;
+	}else {
+		elementByteCount = occ.elementByteCount;
+		bytes = c * elementByteCount;
+		p = new char[bytes];
+		memcpy(p, (char*)occ.p + b * elementByteCount , bytes);
+		shadow = NO;
+	}
+	[self autorelease];
+	[self retain];
+	return self;
+};
 +(id) shadowOCcacheWithOCcache:(OCcache*)occ
 									beginElement:(size_t)b
-												 count:(size_t)r
-{
-	OCcache* nocc = [[OCcache alloc] init];
-	nocc->shadow = YES;
-	char* p = (char*)(occ->p);
-	nocc->p = p + b * occ->elementByteCount;
-	nocc->bytes = r * occ->elementByteCount;
-	nocc->elementByteCount = occ->elementByteCount;
-	return nocc;
-};
-
-+(id) shadowOCcacheWithOCcache:(OCcache*)occ
-										 beginByte:(size_t)b
-												 count:(size_t)r
-{
-	OCcache* nocc = [[OCcache alloc] init];
-	nocc->shadow = YES;
-	char* pc = (char*)(occ->p);
-	nocc->p = pc + b;
-	nocc->bytes = r;
-	nocc->elementByteCount = occ->elementByteCount;
-	return nocc;
+												 count:(size_t)r{
+	return [[OCcache alloc] initWithOCcache:occ
+														 beginElement:b
+																		count:r
+																	 shadow:YES];
 };
 
 -(size_t) count{
 	return bytes/elementByteCount;
 };
--(void*) entryWithOffset:(size_t)n{
-	return (void*)((char*)p + n);
+-(void*)	entryWithOffset:(size_t)offset{
+	return (void*)((char*)p + offset);
 };
--(void*) elementPtrAtIndex:(size_t) i{
-	if((i * elementByteCount) >= (bytes)) {
-		return nil;
-	}
-	return (void*)((char*)p + i*elementByteCount);
+
+-(void*) elementPtrAtIndex:(size_t)i{
+	return (void*)((char*)p + i * elementByteCount);
 };
 
 @end
-
+#pragma clang diagnostic pop
