@@ -26,15 +26,19 @@ struct OCMKey{
 
 @interface OCdictionary : NSObject
 {
-	map<OCMKey, id>* pm;
+	map<OCMKey, id>* p;
 }
+@property (readonly, nonatomic) map<OCMKey,id>* p;
 -(id) init;
 -(void) dealloc;
 
 +(id) dictWithObjectPairs:(id)k0, ...;
++(id) dictWithObjectPairsNoCopy:(id)k0, ...;
 
 +(id) dictWithKeys:(OCarray*)kary
-						values:(OCarray*)vary;
+						values:(OCarray*)vary
+							copy:(BOOL)yn;
+
 +(id) dictWithOCdictionary:(OCdictionary*)d;
 
 +(id) dictWithMap:(map<OCMKey,id>*) m;
@@ -45,7 +49,8 @@ struct OCMKey{
 
 -(id) initWithObjectPairs:(id)k0, ...;
 -(id) initWithKeys:(OCarray*)kary
-						values:(OCarray*)vary;
+						values:(OCarray*)vary
+							copy:(BOOL)yn;
 
 -(id) initWithOCdictionary:(OCdictionary*)d;
 -(id) initWithMap:(map<OCMKey,id>*) m;
