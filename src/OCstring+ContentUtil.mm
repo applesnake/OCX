@@ -89,6 +89,7 @@ using namespace std;
 						(ps[1] == 'O' || ps[1] == 'o')) {
 		return NO;
 	};
+    return NO;
 };
 -(int) compare:(OCstring*)s{
 	return (*p) == *(s.p);
@@ -146,6 +147,7 @@ using namespace std;
 };
 -(id) addSuffix:(OCstring*)s{
 	p->append(*(s.p));
+    return self;
 };
 +(regex*) regexWithString:(OCstring*)s{
 	return new regex(*(s.p));

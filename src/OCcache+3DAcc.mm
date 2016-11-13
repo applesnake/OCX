@@ -13,6 +13,7 @@
 	width = w;
 	height = h;
 	z = Z;
+    return self;
 };
 
 -(void*) elementAtColum:(int)col

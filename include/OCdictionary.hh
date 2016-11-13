@@ -13,6 +13,9 @@ struct OCMKey{
 	bool operator < (const OCMKey kk) const{
 		return [kobj lessThan:kk.kobj];
 	};
+	OCMKey(id obj) {
+		kobj = obj;
+	};
 	OCMKey(){ kobj = nil;};
 	~OCMKey(){ kobj = nil;};
 	OCMKey& operator = (const OCMKey& k) {

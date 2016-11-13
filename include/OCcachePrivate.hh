@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #import "OCcache.hh"
-@class OCcache;
 @interface OCcache ()
 {
 	size_t	width;

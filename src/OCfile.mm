@@ -129,6 +129,7 @@
 		size_t n = [self fileBytes];
 		return [self readBytes:n];
 	}
+    return nil;
 };
 -(long) writeOCcache:(OCcache*)occ{
 	if(f) {

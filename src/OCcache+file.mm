@@ -4,7 +4,7 @@
 @implementation OCcache(file)
 +(OCcache*) OCcacheWithOCfile:(OCfile*)f{
 	size_t bytes = [f fileBytes];
-	OCcahe* nocc = [[OCcache alloc] init];
+	OCcache* nocc = [[OCcache alloc] init];
 	nocc->p = new char[bytes];
 	nocc->bytes = bytes;
 	nocc->elementBytes = 1;

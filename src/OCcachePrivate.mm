@@ -1,4 +1,4 @@
-#import "OCcache.hh"
+#import "OCcachePrivate.hh"
 //#import "OCfile.hh"
 #include <string.h>
 

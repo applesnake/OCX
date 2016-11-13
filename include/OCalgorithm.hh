@@ -8,8 +8,8 @@
 -(id) forEachDo:(id(^)(id obj))blk;
 
 -(id) forBegin:(id)begin_locator
-				 toEnd:(id)end_locator
-			 odBlock:(id(^)(id obj)) blk;
+         toEnd:(id)end_locator
+       odBlock:(id(^)(id obj)) blk;
 
 
 -(id) onYES:(BOOL(^)(id obj))pred

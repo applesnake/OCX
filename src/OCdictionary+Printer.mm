@@ -6,7 +6,7 @@
 
 @implementation OCdictionary(Printer)
 -(void) print {
-	for(auto& pp : (*pm)) {
+	for(auto& pp : (*p)) {
 		OCstring* k = pp.first.kobj;
 		OCstring* v = pp.second;
 		printf("%s -> %s\n", [k UTF8String], [v UTF8String]);

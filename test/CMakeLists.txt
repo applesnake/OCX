@@ -13,12 +13,6 @@ add_executable(test_OCarray ${test_OCarray_src})
 
 target_link_libraries(test_OCarray ocxcr ocxpr)
 
-set(test_OCdict_src
-	../test/test_OCdict.mm)
-
-add_executable(test_OCdict ${test_OCdict_src})
-
-target_link_libraries(test_OCdict ocxcr ocxpr)
 
 set(test_OCcache_src
 	../UnitTest/OCXUnitTestObject.mm
@@ -106,4 +100,11 @@ add_executable(test_OClist ${test_OClist_src})
 
 target_link_libraries(test_OClist ocxcr ocxsu)
 
+set(test_OCdict_src
+		../UnitTest/OCXUnitTestObject.mm
+		../UnitTest/OCXUT-OCdictionary-Basic.mm
+		../test/test_OCdictionary.mm)
 
+add_executable(test_OCdict ${test_OCdict_src})
+
+target_link_libraries(test_OCdict ocxcr ocxsu)
